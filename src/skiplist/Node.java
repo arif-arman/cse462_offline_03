@@ -1,3 +1,4 @@
+package skiplist;
 
 public class Node {
 	int key;
@@ -11,11 +12,9 @@ public class Node {
 	public Node(int key) {
 		// TODO Auto-generated constructor stub
 		this.key = key;
+		this.linkCost = 0;
 	}
 	
-	public void setLinkCost(int linkCost) {
-		this.linkCost = linkCost;
-	}
 	
 	@Override
 	public String toString() {

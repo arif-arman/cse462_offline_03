@@ -1,3 +1,4 @@
+package skiplist;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -95,7 +96,7 @@ public class SkipList {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		SkipList skp = new SkipList();
-		/*
+		
 		File file = new File("input.txt");
 		Scanner input = new Scanner(file);
 		while(input.hasNext()) {
@@ -104,11 +105,6 @@ public class SkipList {
 			//System.out.println();
 		}
 		input.close();
-		*/
-		Random rand = new Random();
-		for (int i = 0; i < 10; i++) {
-			skp.skipInsert(rand.nextInt(100));
-		}
 		skp.skipPrint();
 	}
 }
