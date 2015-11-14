@@ -40,6 +40,7 @@ public class SkipList {
 		
 	}
 	
+	
 	public Node skipSearch(int k) {
 		Node p = start;
 		while(p.below != null) {
@@ -49,8 +50,9 @@ public class SkipList {
 		return p;
 	}
 	
-	Node insertAfterAbove(Node p, Node q, int key) {
+	Node insertAfterAbove(Node p, Node q, int key, int cost) {
 		Node temp = new Node(key);
+		temp.linkCost = cost;
 		temp.before = p;
 		temp.after = p.after;
 		p.after.before = temp;
@@ -78,20 +80,56 @@ public class SkipList {
 	}
 	
 	public void skipInsert(int k) {
+		System.out.println(k);
 		if (height == 0) extendTopLayer();
 		
 		Node p = skipSearch(k);
-		Node q = insertAfterAbove(p,null,k);
+		Node q = insertAfterAbove(p,null,k,1);
 		int i = 0;
+		
 		while (rand.nextBoolean()) {
+			int count = q.linkCost;
 			while (p.above == null) {
-				p = p.before;
+				count += p.linkCost;
+				p = p.before;			
 			}
 			p = p.above;
-			q = insertAfterAbove(p, q, k);
+			q = insertAfterAbove(p, q, k, count);
+			Node r = q.after;
+			if (r.key != INF) {
+				int c = 0;
+				Node t = r.below;
+				while (t.key != k) {
+					c++;
+					t = t.before;	
+				}
+				r.linkCost = r.linkCost - q.linkCost + 1;
+			}
 			if (++i == height) extendTopLayer();
 		}
-		
+		Node r = q.after;
+		while (r.above == null) r = r.after;
+		if (r.key != INF) {
+			r = r.above;
+			while (r != null) {
+				r.linkCost++;
+				r = r.above;
+			}
+		}
+		skipPrint();
+	}
+	
+	public int indexOf(int key) {
+		int index = -1;
+		Node p = start;
+		while(p.below != null) {
+			p = p.below;
+			while(p.after.key <= key) {
+				p = p.after;
+				index += p.linkCost;
+			}
+		}
+		return index;
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
@@ -106,5 +144,6 @@ public class SkipList {
 		}
 		input.close();
 		skp.skipPrint();
+		System.out.println(skp.indexOf(25));
 	}
 }

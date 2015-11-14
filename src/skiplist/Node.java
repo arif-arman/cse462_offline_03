@@ -19,7 +19,7 @@ public class Node {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		String s = "" + key ;
+		String s = "" + key + " (" + linkCost + ")" ;
 		return s;
 	}
 	
