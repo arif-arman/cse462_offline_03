@@ -97,10 +97,8 @@ public class SkipList {
 			q = insertAfterAbove(p, q, k, count);
 			Node r = q.after;
 			if (r.key != INF) {
-				int c = 0;
 				Node t = r.below;
 				while (t.key != k) {
-					c++;
 					t = t.before;	
 				}
 				r.linkCost = r.linkCost - q.linkCost + 1;
@@ -145,6 +143,7 @@ public class SkipList {
 			//System.out.println();
 		}
 		input.close();
+		
 		skp.skipPrint();
 		System.out.println(skp.indexOf(54));
 	}

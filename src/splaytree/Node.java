@@ -12,5 +12,12 @@ public class Node {
 		this.data = data;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String s = "" + data;
+		return s;
+	}
+	
 
 }

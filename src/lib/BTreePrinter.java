@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import splaytree.Node;
+import splaytree.SplayTree;
 public class BTreePrinter {
 
     public static void printNode(Node root) {
@@ -24,18 +25,18 @@ public class BTreePrinter {
         List<Node> newNodes = new ArrayList<Node>();
         for (Node node : nodes) {
             if (node != null) {
-                System.out.print(node.data);
+                SplayTree.out.print(node.data);
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {
                 newNodes.add(null);
                 newNodes.add(null);
-                System.out.print(" ");
+                SplayTree.out.print(" ");
             }
 
             BTreePrinter.printWhitespaces(betweenSpaces);
         }
-        System.out.println("");
+        SplayTree.out.println("");
 
         for (int i = 1; i <= endgeLines; i++) {
             for (int j = 0; j < nodes.size(); j++) {
@@ -46,21 +47,21 @@ public class BTreePrinter {
                 }
 
                 if (nodes.get(j).left != null)
-                    System.out.print("/");
+                    SplayTree.out.print("/");
                 else
                     BTreePrinter.printWhitespaces(1);
 
                 BTreePrinter.printWhitespaces(i + i - 1);
 
                 if (nodes.get(j).right != null)
-                    System.out.print("\\");
+                    SplayTree.out.print("\\");
                 else
                     BTreePrinter.printWhitespaces(1);
 
                 BTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
             }
 
-            System.out.println("");
+            SplayTree.out.println("");
         }
 
         printNodeInternal(newNodes, level + 1, maxLevel);
@@ -68,7 +69,7 @@ public class BTreePrinter {
 
     private static void printWhitespaces(int count) {
         for (int i = 0; i < count; i++)
-            System.out.print(" ");
+            SplayTree.out.print(" ");
     }
 
     private static int maxLevel(Node node) {

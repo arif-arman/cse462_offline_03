@@ -1,43 +1,40 @@
 package splaytree;
 
 import lib.BTreePrinter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class SplayTree {
+	
+	public static PrintWriter out;
 
 	public SplayTree() throws FileNotFoundException {
 		// TODO Auto-generated constructor stub
 		File file = new File("input.txt");
 		Scanner input = new Scanner(file);
-
+		out = new PrintWriter(new File("output.txt"));
 		// construct a tree
 		Node root = null;
 		while (input.hasNext()) {
 			root = splayInsert(root, new Node(input.nextInt()));
-			BTreePrinter.printNode(root);
+			//BTreePrinter.printNode(root);
 		}
 		input.close();
-		// walk(root);
+		out.println("--- Tree walk ---");
+		walk(root);
 		BTreePrinter.printNode(root);
-		Node temp = search(root, 44);
-		if (temp != null)
-			System.out.println("Found: " + temp.data);
-		else
-			System.out.println("Not found");
-
+		
+		//root = splayInsert(root, new Node(77));
+		//BTreePrinter.printNode(root);
+		Node temp;
 		temp = minimum(root);
-		System.out.println("Minimum: " + temp.data);
+		out.println("Minimum: " + temp.data);
 		temp = maximum(root);
-		System.out.println("Maximum: " + temp.data);
+		out.println("Maximum: " + temp.data);
 
-		int k = 99;
-		temp = successor(search(root, k));
-		if (temp != null)
-			System.out.println("Successor of " + k + ": " + temp.data);
-		else
-			System.out.println("Not found");
 
 		// root = delete(root, temp);
 		// BTreePrinter.printNode(root);
@@ -47,15 +44,23 @@ public class SplayTree {
 		// BTreePrinter.printNode(root);
 		
 		// splay
-		root = splaySearch(root, 17);
+		int searchKey = 53;
+		root = splaySearch(root, searchKey);
 		BTreePrinter.printNode(root);
+		
+		//delete
+		searchKey = 99;
+		root = splayDelete(root, searchKey);
+		BTreePrinter.printNode(root);
+		
+		out.close();
 	}
 
 	void walk(Node root) {
 		if (root == null)
 			return;
 		walk(root.left);
-		System.out.println(root.data);
+		out.println(root.data);
 		walk(root.right);
 	}
 
@@ -95,11 +100,30 @@ public class SplayTree {
 	      if(t.data <= node.data) t = t.right;
 	      else t = t.left;
 	    }
-		node.parent = p;
-	    if(p == null ) root = node;
-	    else if(p.data <= node.data) p.right = node;
-	    else p.left = node;
-		return splay(root, node);
+		//System.out.println(p + " " + node);
+		if(p != null) {
+			root = splay(root, p);
+			//BTreePrinter.printNode(root);
+			if (root.data <= node.data) {
+				node.left = root;
+				root.parent = node;
+				if (root.right != null) {
+					node.right = root.right;
+					root.right.parent = node;
+					root.right = null;
+				}
+			}
+			else {
+				node.right = root;
+				root.parent = node;
+				if (root.left != null) {
+					node.left = root.left;
+					root.left.parent = node;
+					root.left = null;
+				}
+			}
+		}
+		return node;
 	}
 
 	Node search(Node root, int data) {
@@ -111,6 +135,19 @@ public class SplayTree {
 			return search(root.right, data);
 	}
 
+	Node splaySearch(Node root, int data) {
+		out.println("Searching ... " + data);
+		Node node = search(root, data);
+		if (node != null) {
+			out.println(data + " found");
+			return splay(root,node);
+		}
+		else {
+			out.println(data + " not found");
+			return root;
+		}
+	}
+	
 	Node minimum(Node root) {
 		if (root == null)
 			return null;
@@ -120,12 +157,6 @@ public class SplayTree {
 		return root;
 	}
 	
-	Node splaySearch(Node root, int data) {
-		Node node = search(root, data);
-		if (node != null) return splay(root,node);
-		else return root;
-	}
-
 	Node maximum(Node root) {
 		if (root == null)
 			return null;
@@ -188,6 +219,27 @@ public class SplayTree {
 		return root;
 	}
 
+	Node splayDelete(Node root, int searchKey) {
+		out.println("Deleting ... " + searchKey);
+		Node temp = splaySearch(root,searchKey);
+		//BTreePrinter.printNode(temp);
+		if (temp.data != searchKey) {
+			out.println(searchKey + " not found");
+			return root;
+		}
+		else {
+			Node l = temp.left;
+			Node r = temp.right;
+			temp = null;
+			Node max = maximum(l);
+			l = splay(l, max);
+			l.right = r;
+			r.parent = l;
+			out.println(searchKey + " deleted");
+			return l;
+		}
+		
+	}
 	Node leftRotate(Node root, Node node) {
 		Node t = node.right;
 		if (t == null)
