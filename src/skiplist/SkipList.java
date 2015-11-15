@@ -80,7 +80,7 @@ public class SkipList {
 	}
 	
 	public void skipInsert(int k) {
-		System.out.println(k);
+		//System.out.println(k);
 		if (height == 0) extendTopLayer();
 		
 		Node p = skipSearch(k);
@@ -107,16 +107,18 @@ public class SkipList {
 			}
 			if (++i == height) extendTopLayer();
 		}
+		
 		Node r = q.after;
-		while (r.above == null) r = r.after;
-		if (r.key != INF) {
-			r = r.above;
-			while (r != null) {
-				r.linkCost++;
+		while (true) {
+			if (r.above == null) r = r.after;
+			if (r == null) break;
+			while (r.above!= null) {
 				r = r.above;
+				r.linkCost++;
 			}
+			
 		}
-		skipPrint();
+		//skipPrint();
 	}
 	
 	public int indexOf(int key) {
@@ -144,6 +146,6 @@ public class SkipList {
 		}
 		input.close();
 		skp.skipPrint();
-		System.out.println(skp.indexOf(25));
+		System.out.println(skp.indexOf(54));
 	}
 }
