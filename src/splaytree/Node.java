@@ -2,10 +2,10 @@ package splaytree;
 
 public class Node {
 	
-	int data;
-	Node parent;
-	Node left;
-	Node right;
+	public int data;
+	public Node parent;
+	public Node left;
+	public Node right;
 	
 	public Node(int data) {
 		// TODO Auto-generated constructor stub
