@@ -1,15 +1,15 @@
 package skiplist;
 
-public class Node {
+public class Node_1005046 {
 	int key;
-	Node above;
-	Node below;
-	Node before;
-	Node after;
+	Node_1005046 above;
+	Node_1005046 below;
+	Node_1005046 before;
+	Node_1005046 after;
 	
 	int linkCost;
 	
-	public Node(int key) {
+	public Node_1005046(int key) {
 		// TODO Auto-generated constructor stub
 		this.key = key;
 		this.linkCost = 0;

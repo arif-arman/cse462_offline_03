@@ -4,19 +4,19 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class SkipList {
+public class SkipList_1005046 {
 	
 	final int INF = 10000;
-	Node start;
-	Node end;
+	Node_1005046 start;
+	Node_1005046 end;
 	int height;
 	int size;
 	Random rand;
 	
-	public SkipList() {
+	public SkipList_1005046() {
 		// TODO Auto-generated constructor stub
-		start = new Node(-INF);
-		end = new Node(INF);
+		start = new Node_1005046(-INF);
+		end = new Node_1005046(INF);
 		start.after = end;
 		end.before = start;
 		height = 0;
@@ -25,9 +25,9 @@ public class SkipList {
 	}
 	
 	public void skipPrint() {
-		Node downward = start;
+		Node_1005046 downward = start;
 		while(downward != null) {
-			Node forward = downward;
+			Node_1005046 forward = downward;
 			while(true) {
 				System.out.print(forward);
 				forward = forward.after;
@@ -41,8 +41,8 @@ public class SkipList {
 	}
 	
 	
-	public Node skipSearch(int k) {
-		Node p = start;
+	public Node_1005046 skipSearch(int k) {
+		Node_1005046 p = start;
 		while(p.below != null) {
 			p = p.below;
 			while(p.after.key <= k) p = p.after;
@@ -50,8 +50,8 @@ public class SkipList {
 		return p;
 	}
 	
-	Node insertAfterAbove(Node p, Node q, int key, int cost) {
-		Node temp = new Node(key);
+	Node_1005046 insertAfterAbove(Node_1005046 p, Node_1005046 q, int key, int cost) {
+		Node_1005046 temp = new Node_1005046(key);
 		temp.linkCost = cost;
 		temp.before = p;
 		temp.after = p.after;
@@ -66,8 +66,8 @@ public class SkipList {
 	}
 	
 	void extendTopLayer() {
-		Node n1 = new Node(-INF);
-		Node n2 = new Node(INF);
+		Node_1005046 n1 = new Node_1005046(-INF);
+		Node_1005046 n2 = new Node_1005046(INF);
 		n1.below = start;
 		n1.after = n2;
 		n2.before = n1;
@@ -83,8 +83,8 @@ public class SkipList {
 		//System.out.println(k);
 		if (height == 0) extendTopLayer();
 		
-		Node p = skipSearch(k);
-		Node q = insertAfterAbove(p,null,k,1);
+		Node_1005046 p = skipSearch(k);
+		Node_1005046 q = insertAfterAbove(p,null,k,1);
 		int i = 0;
 		
 		while (rand.nextBoolean()) {
@@ -95,9 +95,9 @@ public class SkipList {
 			}
 			p = p.above;
 			q = insertAfterAbove(p, q, k, count);
-			Node r = q.after;
+			Node_1005046 r = q.after;
 			if (r.key != INF) {
-				Node t = r.below;
+				Node_1005046 t = r.below;
 				while (t.key != k) {
 					t = t.before;	
 				}
@@ -106,7 +106,7 @@ public class SkipList {
 			if (++i == height) extendTopLayer();
 		}
 		
-		Node r = q.after;
+		Node_1005046 r = q.after;
 		while (true) {
 			if (r.above == null) r = r.after;
 			if (r == null) break;
@@ -121,7 +121,7 @@ public class SkipList {
 	
 	public int indexOf(int key) {
 		int index = -1;
-		Node p = start;
+		Node_1005046 p = start;
 		while(p.below != null) {
 			p = p.below;
 			while(p.after.key <= key) {
@@ -133,18 +133,28 @@ public class SkipList {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		SkipList skp = new SkipList();
-		
-		File file = new File("input.txt");
+		SkipList_1005046 skp = new SkipList_1005046();
+		File file = new File("input1.txt");
 		Scanner input = new Scanner(file);
 		while(input.hasNext()) {
-			skp.skipInsert(input.nextInt());
-			//skp.skipPrint();
+			int choice = input.nextInt();
+			if (choice == 1) skp.skipInsert(input.nextInt());
+			else if (choice == 2) {
+				int searchKey = input.nextInt();
+				System.out.println("Index of " + searchKey + ": " + skp.indexOf(searchKey));
+				//skp.skipPrint();
+			}
+			else skp.skipPrint();
 			//System.out.println();
 		}
 		input.close();
+		/*
+		int insertKey = 97;
+		skp.skipInsert(insertKey);
+		*/
 		
-		skp.skipPrint();
-		System.out.println(skp.indexOf(54));
+
+
+		//System.out.println("Index of " + searchKey + ": " + skp.indexOf(searchKey));
 	}
 }
